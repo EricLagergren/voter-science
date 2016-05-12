@@ -29,7 +29,6 @@ func main() {
 	defer file.Close()
 
 	w := csv.NewWriter(out)
-	w.Comma = '\t'
 
 	header, err := r.Read()
 	if err != nil {

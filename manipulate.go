@@ -23,7 +23,6 @@ func main() {
 	defer file.Close()
 
 	r := csv.NewReader(file)
-	r.Comma = '\t'
 
 	rows, err := buildRows(r)
 	if err != nil {
