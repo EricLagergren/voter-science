@@ -35,6 +35,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	if err := w.Write(header); err != nil {
+		log.Fatalln(err)
+	}
 
 	rec, err := r.Read()
 	if err != nil {
@@ -58,13 +61,19 @@ func main() {
 			street = rec[0]
 		}
 
+		for i := range rec {
+			rec[i] = strings.Replace(rec[i], `"`, "", -1)
+			rec[i] = strings.TrimSpace(rec[i])
+		}
+
 		// Some rows lack full fields, so pad them.
 		if diff := len(header) - len(rec); diff > 0 {
-			rec = append(rec, strings.Repeat("", diff))
+			rec = append(rec, make([]string, diff)...)
 		}
 
 		if err := w.Write(rec); err != nil {
 			log.Fatalln(err)
 		}
 	}
+	w.Flush()
 }
